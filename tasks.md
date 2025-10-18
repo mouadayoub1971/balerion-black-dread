@@ -129,15 +129,15 @@ backend/
 ├── serverless.yml (or template.yaml for SAM)
 └── package.json
 ```
-- [ ] Create project folder structure
-- [ ] Initialize npm: `npm init -y`
+- [x] Create project folder structure
+- [x] Initialize npm: `npm init -y`
 
 ### 3.2 Lambda Functions to Create
 
 #### Function 1: Chat Handler
-- [ ] **Endpoint**: POST /chat
-- [ ] **Purpose**: Process user messages, call Gemini API, return response
-- [ ] **Code**:
+- [x] **Endpoint**: POST /chat
+- [x] **Purpose**: Process user messages, call Gemini API, return response
+- [x] **Code**:
   - Parse incoming message from request body
   - Call Google Gemini API:
     ```
@@ -147,13 +147,13 @@ backend/
     ```
   - Save user message and AI response to DynamoDB
   - Return AI response
-- [ ] **Environment Variables**: GEMINI_API_KEY, DYNAMODB_TABLE
-- [ ] **Response format**: Extract text from `response.candidates[0].content.parts[0].text`
+- [x] **Environment Variables**: GEMINI_API_KEY, DYNAMODB_TABLE
+- [x] **Response format**: Extract text from `response.candidates[0].content.parts[0].text`
 
 #### Function 2: Image Generator
-- [ ] **Endpoint**: POST /generate-image
-- [ ] **Purpose**: Generate images from text prompts using Google Imagen
-- [ ] **Code**:
+- [x] **Endpoint**: POST /generate-image
+- [x] **Purpose**: Generate images from text prompts using Google Imagen
+- [x] **Code**:
   - Parse prompt from request body
   - Call Google Imagen API:
     ```
@@ -169,32 +169,32 @@ backend/
   - Save metadata (prompt, S3 key, timestamp) to DynamoDB
   - Generate signed S3 URL (valid for 1 hour)
   - Return S3 URL
-- [ ] **Environment Variables**: GEMINI_API_KEY, S3_BUCKET, DYNAMODB_TABLE
-- [ ] **Note**: Response contains base64-encoded images in `predictions[0].bytesBase64Encoded`
+- [x] **Environment Variables**: GEMINI_API_KEY, S3_BUCKET, DYNAMODB_TABLE
+- [x] **Note**: Response contains base64-encoded images in `predictions[0].bytesBase64Encoded`
 
 #### Function 3: Get Chat History
-- [ ] **Endpoint**: GET /history/{sessionId}
-- [ ] **Purpose**: Retrieve conversation history
-- [ ] **Code**:
+- [x] **Endpoint**: GET /history/{sessionId}
+- [x] **Purpose**: Retrieve conversation history
+- [x] **Code**:
   - Query DynamoDB by sessionId
   - Return formatted messages
-- [ ] **Environment Variables**: DYNAMODB_TABLE
+- [x] **Environment Variables**: DYNAMODB_TABLE
 
 #### Function 4: Function Calling Handler (Gemini Tools)
-- [ ] **Endpoint**: POST /function-call
-- [ ] **Purpose**: Execute tools using Gemini's native function calling
-- [ ] **Available Tools**:
+- [x] **Endpoint**: POST /function-call
+- [x] **Purpose**: Execute tools using Gemini's native function calling
+- [x] **Available Tools**:
   - `get_weather`: Get current weather for a location
   - `search_web`: Search the web using DuckDuckGo
   - `calculate`: Perform mathematical calculations
   - `get_time`: Get current time in any timezone
-- [ ] **Code**:
+- [x] **Code**:
   - Define function declarations for Gemini
   - Send message with tools to Gemini API
   - If Gemini requests function call, execute it
   - Send function result back to Gemini
   - Return final response
-- [ ] **Environment Variables**: GEMINI_API_KEY, DYNAMODB_TABLE
+- [x] **Environment Variables**: GEMINI_API_KEY, DYNAMODB_TABLE
 
 ### 3.3 Example Lambda Code
 
@@ -765,23 +765,23 @@ frontend/
 └── assets/
     └── images/
 ```
-- [ ] Create HTML structure
-- [ ] Add chat UI (input, message display, image gallery)
-- [ ] Style with CSS
+- [x] Create HTML structure
+- [x] Add chat UI (input, message display, image gallery)
+- [x] Style with CSS
 
 ### 5.2 Implement Frontend Logic
-- [ ] **config.js**: Store API Gateway URL
-- [ ] **chat.js**:
+- [x] **config.js**: Store API Gateway URL
+- [x] **chat.js**:
   - Send messages to /chat endpoint
   - Display responses
   - Handle errors
-- [ ] **app.js**:
+- [x] **app.js**:
   - Initialize chat session (generate sessionId)
   - Load chat history
   - Handle image generation requests
   - Display generated images
-- [ ] Add loading states and error handling
-- [ ] Implement session management (localStorage/sessionStorage)
+- [x] Add loading states and error handling
+- [x] Implement session management (localStorage/sessionStorage)
 
 ### 5.3 Test Locally
 - [ ] Run local server: `python -m http.server 8000` or `npx serve`
@@ -1031,10 +1031,3 @@ All of this happens automatically - you just define the functions!
 5. Monitor costs daily during initial setup
 
 **Remember:** Delete resources when not in use to avoid charges!
-echo "# balerion-black-dread" >> README.md
-git init
-git add .
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/mouadayoub1971/balerion-black-dread.git
-git push -u origin main

@@ -1,0 +1,251 @@
+service: serverless-chatbot
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${env:AWS_REGION, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+
+  # Environment variables available to all Lambda functions
+  environment:
+    DYNAMODB_TABLE: ${self:custom.tableName}
+    S3_BUCKET: ${self:custom.imagesBucket}
+    GEMINI_API_KEY_PARAM: /chatbot/gemini-api-key
+    OPENWEATHER_API_KEY: ${env:OPENWEATHER_API_KEY, ''}
+
+  # IAM Role permissions for Lambda functions
+  iam:
+    role:
+      statements:
+        # DynamoDB permissions
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}"
+
+        # S3 permissions
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource:
+            - "arn:aws:s3:::${self:custom.imagesBucket}/*"
+
+        # SSM Parameter Store permissions (for API keys)
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:GetParameters
+          Resource:
+            - "arn:aws:ssm:${self:provider.region}:*:parameter/chatbot/*"
+
+        # CloudWatch Logs permissions
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource:
+            - "arn:aws:logs:${self:provider.region}:*:*"
+
+# Custom variables
+custom:
+  tableName: ChatMessages-${self:provider.stage}
+  imagesBucket: chatbot-images-${self:provider.stage}-${env:AWS_ACCOUNT_ID, 'unique-id'}
+
+  # Serverless Offline plugin config (for local development)
+  serverless-offline:
+    httpPort: 3000
+
+# Lambda Functions
+functions:
+  # Chat Handler - Process chat messages
+  chatHandler:
+    handler: functions/chat/handler.handler
+    name: ${self:provider.stage}-chatbot-chat
+    description: Handle chat requests using Gemini API
+    memorySize: 256
+    timeout: 30
+    events:
+      - httpApi:
+          path: /chat
+          method: post
+          cors: true
+    package:
+      patterns:
+        - 'functions/chat/**'
+        - '!functions/generateImage/**'
+        - '!functions/getHistory/**'
+        - '!functions/functionCall/**'
+
+  # Image Generator - Generate images with Imagen
+  imageGenerator:
+    handler: functions/generateImage/handler.handler
+    name: ${self:provider.stage}-chatbot-image
+    description: Generate images using Google Imagen API
+    memorySize: 512
+    timeout: 60
+    events:
+      - httpApi:
+          path: /generate-image
+          method: post
+          cors: true
+    package:
+      patterns:
+        - 'functions/generateImage/**'
+        - '!functions/chat/**'
+        - '!functions/getHistory/**'
+        - '!functions/functionCall/**'
+
+  # Get History - Retrieve conversation history
+  getHistory:
+    handler: functions/getHistory/handler.handler
+    name: ${self:provider.stage}-chatbot-history
+    description: Retrieve chat history from DynamoDB
+    memorySize: 128
+    timeout: 10
+    events:
+      - httpApi:
+          path: /history/{sessionId}
+          method: get
+          cors: true
+    package:
+      patterns:
+        - 'functions/getHistory/**'
+        - '!functions/chat/**'
+        - '!functions/generateImage/**'
+        - '!functions/functionCall/**'
+
+  # Function Call Handler - Execute tools via Gemini
+  functionCallHandler:
+    handler: functions/functionCall/handler.handler
+    name: ${self:provider.stage}-chatbot-function-call
+    description: Handle function calling with Gemini tools
+    memorySize: 256
+    timeout: 30
+    events:
+      - httpApi:
+          path: /function-call
+          method: post
+          cors: true
+    package:
+      patterns:
+        - 'functions/functionCall/**'
+        - '!functions/chat/**'
+        - '!functions/generateImage/**'
+        - '!functions/getHistory/**'
+
+# CloudFormation Resources
+resources:
+  Resources:
+    # DynamoDB Table
+    ChatMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: sessionId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: sessionId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+    # S3 Bucket for Images
+    ImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.imagesBucket}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+        LifecycleConfiguration:
+          Rules:
+            - Id: DeleteOldImages
+              Status: Enabled
+              ExpirationInDays: 30
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+  # CloudFormation Outputs
+  Outputs:
+    ApiEndpoint:
+      Description: "API Gateway endpoint URL"
+      Value:
+        Fn::Sub: "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+
+    DynamoDBTable:
+      Description: "DynamoDB table name"
+      Value: ${self:custom.tableName}
+
+    S3ImagesBucket:
+      Description: "S3 bucket for images"
+      Value: ${self:custom.imagesBucket}
+
+    ChatFunctionArn:
+      Description: "Chat Handler Lambda ARN"
+      Value:
+        Fn::GetAtt: [ChatHandlerLambdaFunction, Arn]
+
+    ImageFunctionArn:
+      Description: "Image Generator Lambda ARN"
+      Value:
+        Fn::GetAtt: [ImageGeneratorLambdaFunction, Arn]
+
+# Plugins
+plugins:
+  - serverless-offline
+
+# Package configuration
+package:
+  individually: true
+  patterns:
+    - '!.git/**'
+    - '!.env'
+    - '!.env.example'
+    - '!node_modules/**'
+    - '!.serverless/**'
+    - '!.vscode/**'
+    - '!README.md'
+    - '!tasks.md'

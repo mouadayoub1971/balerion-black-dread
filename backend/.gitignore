@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Serverless
+.serverless/
+.serverless_plugins/
+
+# AWS SAM
+.aws-sam/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.zip
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Lambda deployment packages
+*.zip
+
+# Python (if using Python lambdas)
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+ENV/
+
+# Secrets and keys
+*.pem
+*.key
+secrets.json
+credentials.json

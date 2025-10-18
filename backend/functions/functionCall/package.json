@@ -1,0 +1,21 @@
+{
+  "name": "chatbot-function-call-handler",
+  "version": "1.0.0",
+  "description": "Lambda function to handle Gemini function calling with built-in tools",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lambda",
+    "gemini",
+    "function-calling",
+    "tools"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "chatbot-chat-handler",
+  "version": "1.0.0",
+  "description": "Lambda function to handle chat requests with Gemini API",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lambda",
+    "gemini",
+    "chat"
+  ],
+  "author": "",
+  "license": "MIT"
+}

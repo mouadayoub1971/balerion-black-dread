@@ -1,0 +1,31 @@
+{
+  "name": "serverless-chatbot-backend",
+  "version": "1.0.0",
+  "description": "Serverless chatbot backend with Gemini AI, image generation, and function calling",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "cd functions/chat && npm install && cd ../generateImage && npm install && cd ../getHistory && npm install && cd ../functionCall && npm install",
+    "deploy": "serverless deploy",
+    "remove": "serverless remove",
+    "logs-chat": "serverless logs -f chatHandler -t",
+    "logs-image": "serverless logs -f imageGenerator -t",
+    "logs-history": "serverless logs -f getHistory -t",
+    "logs-function": "serverless logs -f functionCallHandler -t"
+  },
+  "keywords": [
+    "serverless",
+    "lambda",
+    "gemini",
+    "chatbot",
+    "aws"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
