@@ -212,9 +212,9 @@ const ChatModule = {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message ai-message';
         messageDiv.innerHTML = `
-            <div class="message-avatar">❌</div>
+            <span class="message-label">⚠️ Error</span>
             <div class="message-content">
-                <div class="message-bubble" style="background: #fee; color: #c00;">
+                <div class="message-bubble" style="background: var(--destructive); color: var(--destructive-foreground); border: none;">
                     <strong>Error:</strong> ${this.escapeHtml(errorMessage)}
                 </div>
                 <small class="message-time">${this.formatTime(new Date())}</small>
@@ -234,23 +234,23 @@ const ChatModule = {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}-message`;
 
-        const avatar = type === 'user' ? '👤' : '🤖';
+        const label = type === 'user' ? 'You' : '✨ Alfredo';
         const escapedText = this.escapeHtml(text);
         const formattedText = this.formatText(escapedText);
 
         let functionInfo = '';
         if (functionCalled) {
-            const functionIcons = {
-                'get_weather': '🌤️',
-                'calculate': '🧮',
-                'search_web': '🔍'
+            const functionNames = {
+                'get_weather': '🌤️ Weather',
+                'calculate': '🧮 Calculator',
+                'search_web': '🔍 Search'
             };
-            const icon = functionIcons[functionCalled] || '🛠️';
-            functionInfo = `<div class="message-function">${icon} Used: ${functionCalled}</div>`;
+            const name = functionNames[functionCalled] || functionCalled;
+            functionInfo = `<div class="message-function" style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">Used: ${name}</div>`;
         }
 
         messageDiv.innerHTML = `
-            <div class="message-avatar">${avatar}</div>
+            <span class="message-label">${label}</span>
             <div class="message-content">
                 <div class="message-bubble">${formattedText}</div>
                 ${functionInfo}
@@ -267,17 +267,35 @@ const ChatModule = {
      * @returns {string} Formatted HTML
      */
     formatText(text) {
-        // Convert line breaks to <br>
-        let formatted = text.replace(/\n/g, '<br>');
+        // Split by line breaks to process headings properly
+        let lines = text.split('\n');
+
+        lines = lines.map(line => {
+            // Headings: ### Heading
+            if (line.match(/^#{1,6}\s/)) {
+                const level = line.match(/^#{1,6}/)[0].length;
+                const headingText = line.replace(/^#{1,6}\s/, '');
+                return `<h${level}>${headingText}</h${level}>`;
+            }
+            return line;
+        });
+
+        let formatted = lines.join('<br>');
 
         // Bold: **text**
         formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-        // Italic: *text*
-        formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+        // Italic: *text* (but not inside already matched bold)
+        formatted = formatted.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
+
+        // Links: [text](url) or plain URLs
+        formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+        // Auto-link URLs that aren't already in <a> tags
+        formatted = formatted.replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 
         // Code: `code`
-        formatted = formatted.replace(/`(.+?)`/g, '<code style="background: #f0f0f0; padding: 2px 4px; border-radius: 3px;">$1</code>');
+        formatted = formatted.replace(/`(.+?)`/g, '<code>$1</code>');
 
         return formatted;
     },

@@ -1,0 +1,10 @@
+{
+  "name": "chatbot-video-generator",
+  "version": "1.0.0",
+  "description": "Lambda function to generate videos using Google Veo API",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "uuid": "^9.0.0"
+  }
+}

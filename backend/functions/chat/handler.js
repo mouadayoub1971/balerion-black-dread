@@ -94,12 +94,17 @@ function callGeminiAPI(message, apiKey) {
     const data = JSON.stringify({
       contents: [{
         parts: [{ text: message }]
-      }]
+      }],
+      systemInstruction: {
+        parts: [{
+          text: "You are a helpful AI assistant. If the user asks you to generate, create, or make an image, DO NOT try to describe or generate images in text. Instead, tell them: 'To generate images, please use the /image command. For example: /image sunset over mountains'"
+        }]
+      }
     });
 
     const options = {
       hostname: 'generativelanguage.googleapis.com',
-      path: '/v1beta/models/gemini-2.0-flash:generateContent',
+      path: '/v1beta/models/gemini-2.5-flash:generateContent',
       method: 'POST',
       headers: {
         'x-goog-api-key': apiKey,

@@ -1,0 +1,9 @@
+{
+  "name": "chatbot-maps-search",
+  "version": "1.0.0",
+  "description": "Lambda function for maps search with Google Maps grounding",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0"
+  }
+}

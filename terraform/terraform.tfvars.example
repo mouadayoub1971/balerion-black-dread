@@ -1,0 +1,96 @@
+# =============================================================================
+# Terraform Variables - COPY THIS FILE TO terraform.tfvars AND FILL IN VALUES
+# =============================================================================
+# Command: cp terraform.tfvars.example terraform.tfvars
+# Then edit terraform.tfvars with your actual values
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Project Configuration (CHANGE THESE TO AVOID CONFLICTS!)
+# -----------------------------------------------------------------------------
+
+# Use a unique project name to avoid conflicts with previous deployments
+project_name = "chatbot-v2"  # Change this! (e.g., "my-chatbot", "chatbot-new")
+
+# Environment (dev, staging, or prod)
+environment = "dev"
+
+# AWS Region
+aws_region = "us-east-1"
+
+# -----------------------------------------------------------------------------
+# API Keys (REQUIRED!)
+# -----------------------------------------------------------------------------
+
+# Google Gemini API Key (REQUIRED)
+# Get yours from: https://aistudio.google.com/
+# Click "Get API Key" and create a new key
+gemini_api_key = "YOUR_GEMINI_API_KEY_HERE"
+
+# OpenWeatherMap API Key (Optional - for weather function)
+# Get free key from: https://openweathermap.org/api
+# Leave empty if you don't want weather functionality
+openweather_api_key = ""
+
+# -----------------------------------------------------------------------------
+# Resource Names (MUST BE UNIQUE!)
+# -----------------------------------------------------------------------------
+
+# DynamoDB Table Name
+# Use a different name than your previous deployment
+dynamodb_table_name = "ChatMessages-v2"  # Change if you had "ChatMessages" before
+
+# S3 Bucket for Images (must be globally unique!)
+# Format: lowercase letters, numbers, and hyphens only
+# Suggestion: chatbot-images-{your-name}-{random}
+s3_images_bucket_name = "chatbot-images-v2-12345"  # CHANGE THIS!
+
+# S3 Bucket for Frontend (must be globally unique!)
+# Format: lowercase letters, numbers, and hyphens only
+# Suggestion: chatbot-frontend-{your-name}-{random}
+s3_frontend_bucket_name = "chatbot-frontend-v2-12345"  # CHANGE THIS!
+
+# -----------------------------------------------------------------------------
+# Optional Configuration
+# -----------------------------------------------------------------------------
+
+# Lambda Configuration
+lambda_runtime     = "nodejs18.x"
+lambda_timeout     = 30
+lambda_memory_size = 256
+
+# Additional Tags
+tags = {
+  Owner       = "YourName"
+  ManagedBy   = "Terraform"
+  CostCenter  = "Engineering"
+}
+
+# =============================================================================
+# SETUP CHECKLIST:
+# =============================================================================
+# [ ] 1. Copy this file: cp terraform.tfvars.example terraform.tfvars
+# [ ] 2. Change project_name to something unique
+# [ ] 3. Get Gemini API key from https://aistudio.google.com/
+# [ ] 4. Paste Gemini API key in gemini_api_key variable
+# [ ] 5. Change s3_images_bucket_name to a globally unique name
+# [ ] 6. Change s3_frontend_bucket_name to a globally unique name
+# [ ] 7. (Optional) Get OpenWeather API key if you want weather feature
+# [ ] 8. Run: terraform init
+# [ ] 9. Run: terraform plan
+# [ ] 10. Run: terraform apply
+# =============================================================================
+
+# =============================================================================
+# NAMING SUGGESTIONS TO AVOID CONFLICTS:
+# =============================================================================
+# Instead of:              Try:
+# ChatMessages         →   ChatMessages-v2 or ChatMessages-{yourname}
+# chatbot-images       →   chatbot-images-v2-{random} or chatbot-{yourname}-imgs
+# chatbot-frontend     →   chatbot-frontend-v2-{random} or chatbot-{yourname}-web
+#
+# For S3 buckets, you can add your name or a random number:
+# - chatbot-images-mouad-2024
+# - chatbot-frontend-mouad-abc123
+# - my-ai-chatbot-images-12345
+# =============================================================================

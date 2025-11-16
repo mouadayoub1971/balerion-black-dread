@@ -7,17 +7,12 @@ const CONFIG = {
     // API Gateway Base URL
     // After deploying backend, replace this with your actual endpoint
     // Example: 'https://abc123xyz.execute-api.us-east-1.amazonaws.com'
-    API_BASE_URL: 'https://6vq08jvvp4.execute-api.us-east-1.amazonaws.com/dev',
+    API_BASE_URL: 'https://y34yf528ad.execute-api.us-east-1.amazonaws.com',
 
     // API Endpoints
     ENDPOINTS: {
         CHAT: '/chat',
         GENERATE_IMAGE: '/generate-image',
-        GENERATE_VIDEO: '/generate-video',
-        PROCESS_DOCUMENT: '/process-document',
-        PROCESS_AUDIO: '/process-audio',
-        WEB_SEARCH: '/web-search',
-        MAPS_SEARCH: '/maps-search',
         FUNCTION_CALL: '/function-call',
         GET_HISTORY: '/history'
     },
@@ -74,76 +69,6 @@ const CONFIG = {
         MAX_PROMPT_LENGTH: 1000
     },
 
-    // Video Generation Settings
-    VIDEO: {
-        // Prefix to trigger video generation
-        COMMAND_PREFIX: '/video',
-
-        // Maximum prompt length for videos
-        MAX_PROMPT_LENGTH: 1000,
-
-        // Video generation timeout (15 minutes)
-        TIMEOUT: 900000 // 15 minutes in milliseconds
-    },
-
-    // Document Processing Settings (Teacher Mode)
-    TEACHER: {
-        // Prefix to trigger document processing
-        COMMAND_PREFIX: '/teacher',
-
-        // Maximum PDF file size (20MB)
-        MAX_FILE_SIZE: 20 * 1024 * 1024, // 20MB in bytes
-
-        // Supported file types
-        SUPPORTED_TYPES: ['application/pdf'],
-
-        // Processing modes
-        MODES: {
-            SUMMARIZE: 'summarize',
-            EXPLAIN: 'explain',
-            QA: 'qa'
-        },
-
-        // Processing timeout (60 seconds)
-        TIMEOUT: 60000
-    },
-
-    // Web Search Settings
-    SEARCH: {
-        // Prefix to trigger web search
-        COMMAND_PREFIX: '/search',
-
-        // Maximum query length
-        MAX_QUERY_LENGTH: 500
-    },
-
-    // Maps Search Settings
-    MAPS: {
-        // Prefix to trigger maps search
-        COMMAND_PREFIX: '/maps',
-
-        // Maximum query length
-        MAX_QUERY_LENGTH: 500,
-
-        // Request location permission
-        REQUEST_LOCATION: true
-    },
-
-    // Audio Settings (Voice Input)
-    AUDIO: {
-        // Maximum recording duration (seconds)
-        MAX_RECORDING_DURATION: 60,
-
-        // Maximum audio file size (10MB)
-        MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB in bytes
-
-        // Supported MIME types
-        SUPPORTED_TYPES: ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'audio/wav'],
-
-        // Processing timeout (2 minutes)
-        TIMEOUT: 120000
-    },
-
     // Error Messages
     ERRORS: {
         NETWORK_ERROR: 'Network error. Please check your connection and try again.',
@@ -151,31 +76,15 @@ const CONFIG = {
         INVALID_RESPONSE: 'Received invalid response from server.',
         SESSION_ERROR: 'Session error. Starting a new session.',
         IMAGE_GENERATION_FAILED: 'Failed to generate image. Please try again.',
-        VIDEO_GENERATION_FAILED: 'Failed to generate video. Please try again.',
-        DOCUMENT_PROCESSING_FAILED: 'Failed to process document. Please try again.',
-        FILE_TOO_LARGE: 'PDF file must be less than 20MB.',
-        INVALID_FILE_TYPE: 'Please select a PDF file.',
-        NO_FILE_SELECTED: 'No file selected.',
         MESSAGE_TOO_LONG: 'Message is too long. Please shorten your message.',
         EMPTY_MESSAGE: 'Please enter a message.',
-        API_NOT_CONFIGURED: 'API endpoint not configured. Please set your API Gateway URL in config.js',
-        WEB_SEARCH_FAILED: 'Web search failed. Please try again.',
-        MAPS_SEARCH_FAILED: 'Maps search failed. Please try again.',
-        AUDIO_PROCESSING_FAILED: 'Audio processing failed. Please try again.',
-        MIC_PERMISSION_DENIED: 'Microphone permission denied. Please allow microphone access.',
-        AUDIO_TOO_LARGE: 'Audio recording is too large. Please record a shorter message.',
-        RECORDING_FAILED: 'Failed to record audio. Please try again.'
+        API_NOT_CONFIGURED: 'API endpoint not configured. Please set your API Gateway URL in config.js'
     },
 
     // Success Messages
     SUCCESS: {
         MESSAGE_SENT: 'Message sent successfully',
         IMAGE_GENERATED: 'Image generated successfully',
-        VIDEO_GENERATED: 'Video generated successfully',
-        DOCUMENT_PROCESSED: 'Document processed successfully',
-        AUDIO_PROCESSED: 'Audio processed successfully',
-        WEB_SEARCH_COMPLETED: 'Web search completed',
-        MAPS_SEARCH_COMPLETED: 'Maps search completed',
         HISTORY_LOADED: 'History loaded',
         SESSION_CREATED: 'New session started'
     }
@@ -187,6 +96,9 @@ const CONFIG = {
  * @returns {string} Full URL
  */
 CONFIG.getApiUrl = function(endpoint) {
+    if (this.API_BASE_URL === 'https://YOUR_API_GATEWAY_URL_HERE') {
+        console.warn('⚠️ API_BASE_URL not configured! Please update config.js with your API Gateway URL.');
+    }
     return `${this.API_BASE_URL}${endpoint}`;
 };
 
@@ -195,20 +107,8 @@ CONFIG.getApiUrl = function(endpoint) {
  * @returns {boolean}
  */
 CONFIG.isApiConfigured = function() {
-    // Check if URL is set and looks like a valid AWS API Gateway URL
-    if (!this.API_BASE_URL || this.API_BASE_URL === '') {
-        return false;
-    }
-
-    // Check if it contains placeholder text
-    if (this.API_BASE_URL.includes('YOUR_API_GATEWAY_URL') ||
-        this.API_BASE_URL.includes('YOUR_API') ||
-        this.API_BASE_URL.includes('PLACEHOLDER')) {
-        return false;
-    }
-
-    // Check if it's a valid HTTPS URL
-    return this.API_BASE_URL.startsWith('https://');
+    return this.API_BASE_URL !== 'https://YOUR_API_GATEWAY_URL_HERE' &&
+           this.API_BASE_URL !== '';
 };
 
 /**

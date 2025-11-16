@@ -25,6 +25,42 @@ exports.handler = async (event) => {
       };
     }
 
+    // Check for common celebrity/public figure names (proactive filtering)
+    // Only blocking specific celebrity names, not generic terms
+    const celebrityKeywords = [
+      // Sports celebrities
+      'neymar', 'messi', 'ronaldo', 'cristiano', 'lebron', 'michael jordan', 'kobe bryant',
+      'serena williams', 'tiger woods', 'mahomes', 'brady', 'mbappe', 'haaland',
+      // Entertainment celebrities
+      'taylor swift', 'beyonce', 'kardashian', 'jenner', 'bieber', 'drake', 'rihanna',
+      'ariana grande', 'selena gomez', 'billie eilish', 'adele', 'ed sheeran',
+      // Tech/Business figures
+      'elon musk', 'jeff bezos', 'bill gates', 'zuckerberg', 'steve jobs', 'tim cook',
+      // Political figures
+      'trump', 'biden', 'obama', 'clinton', 'putin', 'xi jinping',
+      // Actors
+      'tom cruise', 'brad pitt', 'leonardo dicaprio', 'will smith', 'dwayne johnson',
+      'scarlett johansson', 'jennifer lawrence', 'angelina jolie', 'chris hemsworth'
+    ];
+
+    const lowerPrompt = prompt.toLowerCase();
+    const foundKeyword = celebrityKeywords.find(keyword => lowerPrompt.includes(keyword));
+
+    if (foundKeyword) {
+      console.warn(`Blocked celebrity keyword in prompt: "${foundKeyword}"`);
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({
+          error: "⚠️ Cannot generate images of celebrities or specific people. Creating such images could be used for deepfakes and is not allowed. Try using generic descriptions instead (e.g., 'a football player wearing number 10' instead of a celebrity's name).",
+          blockedKeyword: foundKeyword
+        })
+      };
+    }
+
     // Get Gemini API key from SSM Parameter Store
     const apiKeyParam = await ssm.getParameter({
       Name: process.env.GEMINI_API_KEY_PARAM || '/chatbot/gemini-api-key',
@@ -127,13 +163,16 @@ function callImagenAPI(prompt, apiKey) {
     const data = JSON.stringify({
       instances: [{ prompt }],
       parameters: {
-        sampleCount: 1 // Generate 1 image
+        sampleCount: 1,
+        aspectRatio: "1:1",
+        safetyFilterLevel: "block_some",
+        personGeneration: "allow_all"
       }
     });
 
     const options = {
       hostname: 'generativelanguage.googleapis.com',
-      path: '/v1beta/models/imagen-3.0-generate-001:predict',
+      path: '/v1beta/models/imagen-4.0-generate-001:predict',
       method: 'POST',
       headers: {
         'x-goog-api-key': apiKey,
@@ -151,7 +190,35 @@ function callImagenAPI(prompt, apiKey) {
           if (res.statusCode === 200) {
             resolve(response);
           } else {
-            reject(new Error(`Imagen API error: ${response.error?.message || 'Unknown error'}`));
+            // Provide better error messages for common issues
+            let errorMsg = response.error?.message || 'Unknown error';
+            const lowerErrorMsg = errorMsg.toLowerCase();
+
+            // Check for celebrity/deepfake/person-related blocks
+            if (lowerErrorMsg.includes('person') ||
+                lowerErrorMsg.includes('face') ||
+                lowerErrorMsg.includes('celebrity') ||
+                lowerErrorMsg.includes('public figure') ||
+                lowerErrorMsg.includes('deepfake') ||
+                lowerErrorMsg.includes('identity')) {
+              errorMsg = "⚠️ Cannot generate this image. Creating images of specific people or celebrities could be used for deepfakes and is not allowed. Try using generic descriptions instead (e.g., 'a football player' instead of a specific person's name).";
+            }
+            // Check for general safety/policy blocks
+            else if (lowerErrorMsg.includes('safety') ||
+                     lowerErrorMsg.includes('blocked') ||
+                     lowerErrorMsg.includes('policy') ||
+                     lowerErrorMsg.includes('violation')) {
+              errorMsg = '⚠️ Image generation blocked by safety filters. Please try a different prompt that does not include harmful, inappropriate, or copyrighted content.';
+            }
+            // Check for inappropriate content
+            else if (lowerErrorMsg.includes('inappropriate') ||
+                     lowerErrorMsg.includes('offensive') ||
+                     lowerErrorMsg.includes('harmful')) {
+              errorMsg = '⚠️ This prompt contains inappropriate content and cannot be generated. Please use respectful and safe prompts.';
+            }
+
+            console.error('Imagen API Error:', JSON.stringify(response, null, 2));
+            reject(new Error(errorMsg));
           }
         } catch (e) {
           reject(new Error('Failed to parse Imagen API response'));

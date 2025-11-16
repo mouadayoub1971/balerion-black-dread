@@ -1,0 +1,209 @@
+<mxfile host="65bd71144e">
+    <diagram id="serverless-chatbot-architecture" name="Serverless AI Chatbot Architecture">
+        <mxGraphModel dx="2307" dy="1816" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="conn6" value="PutItem" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#C925D1;dashed=1;" parent="1" source="lambda-chat" target="dynamodb" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn9" value="Query" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#C925D1;dashed=1;" parent="1" source="lambda-history" target="dynamodb" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn4" value="Invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=12;fontColor=#232F3E;strokeColor=#ED7100;" parent="1" source="api-gateway" target="lambda-image" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn7" value="PutItem" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#C925D1;dashed=1;" parent="1" source="lambda-image" target="dynamodb" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="lambda-video" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn11" value="GetParameter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#DD344C;dashed=1;" parent="1" source="lambda-image" target="ssm" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="aws-cloud" value="AWS Cloud" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=18;fontStyle=1;strokeColor=#FF9900;fillColor=#FFFFFF;verticalAlign=top;align=left;spacingLeft=20;fontColor=#232F3E;dashed=0;strokeWidth=3;" parent="1" vertex="1">
+                    <mxGeometry x="-180" y="-60" width="2180" height="1320" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="User Browser&#xa;(Frontend - Static Website)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=16;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.user;" parent="1" vertex="1">
+                    <mxGeometry x="-50" y="460" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-frontend" value="S3 Frontend Bucket&#xa;Static Website Hosting&#xa;&#xa;• index.html&#xa;• style.css&#xa;• JavaScript modules" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="450" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-gateway" value="API Gateway (HTTP API)&#xa;&#xa;9 Routes:&#xa;/chat, /generate-image,&#xa;/generate-video, /history,&#xa;/function-call, /process-document,&#xa;/web-search, /maps-search,&#xa;/process-audio&#xa;&#xa;CORS: Enabled" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="440" width="160" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-group" value="Lambda Functions (9 Total)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#FF9900;strokeWidth=2;fontSize=16;fontStyle=1;verticalAlign=top;align=center;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="180" width="580" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="lambda-video" target="lambda-image">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-video" value="Video Generator&lt;br&gt;Veo API&lt;br&gt;1024MB | 900s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="230" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-function" value="Function Call&#xa;&#xa;Tools Handler&#xa;256MB | 30s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="390" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-doc" value="Process Document&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="390" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-web" value="Web Search&#xa;&#xa;MCP Integration&#xa;256MB | 30s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-maps" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;Maps Search&lt;br&gt;&lt;br&gt;MCP Integration&lt;br&gt;256MB | 30s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-audio" value="Process Audio&#xa;&#xa;Audio Processing&#xa;1024MB | 120s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="dynamodb" value="DynamoDB Table&#xa;ChatMessages&#xa;&#xa;• sessionId (HASH)&#xa;• timestamp (RANGE)&#xa;• TTL Enabled&#xa;• Streams Enabled&#xa;• On-Demand Pricing" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="1100" y="700" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-images" value="S3 Images Bucket&#xa;(Private)&#xa;&#xa;• Generated Images&#xa;• Videos&#xa;• Documents&#xa;• Signed URLs (1h expiry)&#xa;• Lifecycle: 30 days" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="700" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="ssm" value="SSM Parameter Store&#xa;&#xa;• Gemini API Key&#xa;• OpenWeather API Key&#xa;&#xa;Encrypted (KMS)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="700" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="cloudwatch-logs" value="CloudWatch Logs&#xa;&#xa;9 Log Groups&#xa;(One per Lambda)&#xa;&#xa;Real-time Monitoring&#xa;Error Tracking" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#759C3E;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="880" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="cloudwatch-metrics" value="CloudWatch Metrics&#xa;&#xa;• Lambda Invocations&#xa;• API Gateway Requests&#xa;• DynamoDB Operations&#xa;• Error Rates&#xa;• Latency Monitoring" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#759C3E;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="960" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="cloudwatch-alarms" value="CloudWatch Alarms&#xa;&#xa;• High Error Rate&#xa;• Throttling&#xa;• Cost Alerts&#xa;• Performance Alerts" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#759C3E;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.alarm;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="970" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="google-cloud" value="Google Cloud Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#4CAF50;strokeWidth=3;fontSize=16;fontStyle=1;verticalAlign=top;align=center;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="180" width="340" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="gemini-api" value="Gemini 2.5 Flash API&lt;br&gt;&lt;br&gt;Chat Processing&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4CAF50;strokeWidth=2;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="220" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="imagen-api" value="Imagen 4.0 API&lt;br&gt;&lt;br&gt;Image Generation&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4CAF50;strokeWidth=2;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="220" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="veo-api" value="Veo API&lt;br&gt;&lt;br&gt;Video Generation&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4CAF50;strokeWidth=2;fontSize=13;fontStyle=1;opacity=60;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="310" width="150" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="iam-role" value="IAM Execution Role&#xa;&#xa;Least Privilege&#xa;Policies" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=14;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.identity_and_access_management;spacingTop=10;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="730" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=12;fontColor=#232F3E;strokeColor=#FF9900;" parent="1" source="user" target="s3-frontend" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn2" value="API Calls (REST)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=12;fontColor=#232F3E;strokeColor=#E7157B;" parent="1" source="s3-frontend" target="api-gateway" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn3" value="Invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=12;fontColor=#232F3E;strokeColor=#ED7100;" parent="1" source="api-gateway" target="lambda-chat" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn5" value="Invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=12;fontColor=#232F3E;strokeColor=#ED7100;" parent="1" source="api-gateway" target="lambda-history" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn10" value="GetParameter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#DD344C;dashed=1;" parent="1" source="lambda-chat" target="ssm" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn13" value="API Call" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#4CAF50;dashed=1;" parent="1" source="lambda-image" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="580" y="280"/>
+                            <mxPoint x="580" y="280"/>
+                        </Array>
+                        <mxPoint x="580" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn14" value="Logs Stream" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#759C3E;dashed=1;" parent="1" source="lambda-group" target="cloudwatch-logs" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="880" y="950"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn15" value="Metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#759C3E;dashed=1;" parent="1" source="api-gateway" target="cloudwatch-metrics" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="640" y="640"/>
+                            <mxPoint x="500" y="640"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn16" value="Metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#759C3E;dashed=1;" parent="1" source="dynamodb" target="cloudwatch-metrics" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1170" y="860"/>
+                            <mxPoint x="530" y="860"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn17" value="Trigger" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#759C3E;" parent="1" source="cloudwatch-metrics" target="cloudwatch-alarms" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn18" value="AssumeRole" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#DD344C;dashed=1;" parent="1" source="iam-role" target="lambda-group" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="760" y="760"/>
+                            <mxPoint x="760" y="400"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="legend" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=2;fontSize=14;fontStyle=1;verticalAlign=top;align=left;spacingTop=10;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="1490" y="850" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-active" value="✅ Active Service" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#232F3E;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="900" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-sync" value="─── Synchronous Call" style="text;html=1;strokeColor=#ED7100;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#232F3E;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="950" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-async" value="- - - Asynchronous Call" style="text;html=1;strokeColor=#C925D1;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#232F3E;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="980" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-monitor" value="- - - Monitoring Flow" style="text;html=1;strokeColor=#759C3E;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#232F3E;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="1010" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="title" value="Serverless AI Chatbot - AWS Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#232F3E;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="20" width="800" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="9 Lambda Functions | API Gateway HTTP API | DynamoDB | S3 | CloudWatch | Google Gemini APIs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="60" width="1000" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1240" y="230" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1240" y="390" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-image" value="Image Generator&lt;br&gt;Imagen 4.0&lt;br&gt;512MB | 60s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="230" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn8" value="PutObject" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;fontSize=11;fontColor=#232F3E;strokeColor=#7AA116;dashed=1;" parent="1" source="lambda-image" target="s3-images" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-chat" value="Chat Handler&lt;br&gt;Gemini 2.5 Flash&lt;br&gt;256MB | 30s" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="230" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="lambda-history" value="Get History&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="390" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1080" y="390" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1240" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1080" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="1080" y="510" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" vertex="1" parent="1">
+                    <mxGeometry x="920" y="510" width="90" height="90" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

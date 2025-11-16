@@ -1,0 +1,9 @@
+{
+  "name": "chatbot-document-processor",
+  "version": "1.0.0",
+  "description": "Lambda function to process PDFs with Gemini API",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0"
+  }
+}

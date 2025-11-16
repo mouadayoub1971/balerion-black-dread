@@ -104,16 +104,16 @@ const ImageGenerator = {
         messageDiv.className = 'message ai-message';
 
         messageDiv.innerHTML = `
-            <div class="message-avatar">🎨</div>
+            <span class="message-label">🎨 Alfredo</span>
             <div class="message-content">
                 <div class="message-bubble">
-                    <p><strong>Generated Image:</strong></p>
-                    <p style="color: #666; font-size: 0.9em; margin: 0.5em 0;">Prompt: "${this.escapeHtml(prompt)}"</p>
+                    <p><strong>Generated Image</strong></p>
+                    <p style="color: var(--muted-foreground); font-size: 0.875rem; margin: 0.5rem 0;">Prompt: "${this.escapeHtml(prompt)}"</p>
                     <img src="${imageUrl}"
                          alt="${this.escapeHtml(prompt)}"
                          class="message-image"
                          onclick="ImageGenerator.openModal('${imageUrl}', '${this.escapeHtml(prompt)}')">
-                    <p style="font-size: 0.85em; color: #888; margin-top: 0.5em;">Click to view full size</p>
+                    <p style="font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.5rem;">Click to view full size</p>
                 </div>
                 <small class="message-time">${this.formatTime(new Date())}</small>
             </div>
@@ -135,17 +135,17 @@ const ImageGenerator = {
         messageDiv.id = 'generatingMessage';
 
         messageDiv.innerHTML = `
-            <div class="message-avatar">🎨</div>
+            <span class="message-label">🎨 Alfredo</span>
             <div class="message-content">
                 <div class="message-bubble">
                     <p><strong>Generating image...</strong></p>
-                    <p style="color: #666; font-size: 0.9em;">Prompt: "${this.escapeHtml(prompt)}"</p>
-                    <div class="loading-dots" style="margin-top: 10px;">
+                    <p style="color: var(--muted-foreground); font-size: 0.875rem;">Prompt: "${this.escapeHtml(prompt)}"</p>
+                    <div class="loading-dots" style="margin-top: 0.75rem;">
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
-                    <p style="font-size: 0.85em; color: #888; margin-top: 0.5em;">This may take 10-30 seconds...</p>
+                    <p style="font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.5rem;">This may take 10-30 seconds...</p>
                 </div>
             </div>
         `;

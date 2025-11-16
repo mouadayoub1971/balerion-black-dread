@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(aws apigatewayv2 get-api --api-id y34yf528ad --query '{Name:Name,Endpoint:ApiEndpoint,Protocol:ProtocolType}' --output json)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"message\"\":\"\"test\"\",\"\"sessionId\"\":\"\"test-123\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/chat)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"message\"\":\"\"test\"\",\"\"sessionId\"\":\"\"test-123\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/chat)",
+      "Bash(aws logs tail /aws/lambda/chatbot-v1971-dev-chat-handler --since 5m)",
+      "Bash(aws logs tail \"//aws/lambda/chatbot-v1971-dev-chat-handler\" --since 5m)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"message\"\":\"\"hello\"\",\"\"sessionId\"\":\"\"test-123\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/chat)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"prompt\"\":\"\"a cat\"\",\"\"sessionId\"\":\"\"test-123\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/generate-image)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"prompt\"\"\"\":\"\"\"\"a calm sea with birds flying\"\"\"\",\"\"\"\"sessionId\"\"\"\":\"\"\"\"test-123\"\"\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/generate-image)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"generate an image of a sunset\"\"\"\",\"\"\"\"sessionId\"\"\"\":\"\"\"\"test-456\"\"\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/chat)",
+      "Bash(curl -X POST -H \"Content-Type: application/json\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Tell me a joke\"\"\"\",\"\"\"\"sessionId\"\"\"\":\"\"\"\"test-456\"\"\"\"}' https://y34yf528ad.execute-api.us-east-1.amazonaws.com/dev/chat)",
+      "Bash(aws s3 rm:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(aws s3api list-object-versions:*)",
+      "Bash(terraform state list:*)",
+      "Bash(aws lambda list-functions:*)",
+      "Bash(aws dynamodb list-tables:*)",
+      "Bash(aws apigatewayv2 get-apis:*)",
+      "Bash(aws s3 ls:*)",
+      "Bash(aws ec2 describe-instances:*)",
+      "Bash(chmod:*)",
+      "Bash(./list-resources.sh:*)",
+      "Bash(aws logs tail:*)",
+      "Bash(aws lambda get-function:*)",
+      "Bash(aws lambda invoke:*)",
+      "Bash(cat:*)",
+      "Bash(aws logs describe-log-groups:*)",
+      "Bash(terraform apply:*)",
+      "Bash(curl:*)",
+      "Bash(./deploy-frontend.sh:*)",
+      "Bash(npm install:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(aws lambda update-function-configuration:*)",
+      "Bash(aws iam get-role-policy:*)",
+      "Bash(aws lambda get-function-configuration:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
